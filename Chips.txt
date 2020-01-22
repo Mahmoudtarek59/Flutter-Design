@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+
+void main(){
+  runApp(new MaterialApp(
+    home: MyApp(),
+  ));
+}
+
+class MyApp extends StatefulWidget{
+  @override
+  _State createState()=>new _State();
+}
+
+class _State extends State<MyApp>{
+
+  int counter = 0;
+  List<Widget> _list=new List<Widget>();
+  @override
+  void initState() {
+    for(int i=0;i<5;i++){
+      Widget _child=_newItem(i);
+      _list.add(_child);
+    }
+  }
+  
+  void _onClicked(){
+    Widget _child=_newItem(counter);
+    setState(()=>_list.add(_child));
+  }
+
+  Widget _newItem(int i){
+    Key key=new Key("Item ${i}");
+    counter++;
+    return new Container(
+      key: key,
+      padding: new EdgeInsets.all(5.0),
+      child: new Chip(
+        label: new Text("${i} Name here"),
+        deleteIconColor: Colors.red,
+        deleteButtonTooltipMessage: "Delete",
+        onDeleted: ()=>_onDelete(key),
+        avatar: new CircleAvatar(
+          backgroundColor: Colors.grey.shade600,
+          child: new Text("${i}"),
+        ),
+      ),
+    );
+  }
+
+  void _onDelete(Key key){
+    for(int i=0;i<_list.length;i++){
+      if(_list.elementAt(i).key == key){
+        setState(()=>_list.removeAt(i));
+      }
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Name Here"),
+      ),
+      floatingActionButton: new FloatingActionButton(
+        onPressed: _onClicked,
+        child: new Icon(Icons.add),
+      ),
+      body: SingleChildScrollView(
+        child: new Container(
+          padding: new EdgeInsets.all(15.0),
+          child:new Center(
+            child:new Column(
+              children: _list,
+            ),
+          ),
+        ),
+      )
+    );
+  }
+
+
+}

@@ -1,0 +1,58 @@
+import 'package:flutter/material.dart';
+
+void main(){
+  runApp(new MaterialApp(
+    home: MyApp(),
+  ));
+}
+
+class MyApp extends StatefulWidget{
+  @override
+  _State createState()=>new _State();
+}
+//enum Animals{Cat,Dog,Bird}
+class _State extends State<MyApp>{
+
+  String _Selected="Dog";
+  List<String> _animals=["Dog","Cat","Bird"];
+  List<PopupMenuItem<String>> _items=new List<PopupMenuItem<String>>();
+
+  @override
+  void initState() {
+    for(String animal in _animals){
+      _items.add(new PopupMenuItem(
+        value: animal,
+        child: new Text(animal),
+      ));
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Name Here"),
+      ),
+      body: new Container(
+        padding: new EdgeInsets.all(32.0),
+          child: new Row(
+            children: <Widget>[
+              new Container(
+                padding: new EdgeInsets.all(5.0),
+                child:new Text("you selected ${_Selected}"),
+              ),
+              new PopupMenuButton<String>(
+                child: new Icon(Icons.menu),
+                initialValue: _Selected,
+                onSelected: (val)=>setState(()=>_Selected=val),
+                itemBuilder:(BuildContext context){
+                    return _items;
+                }),
+            ],
+          ),
+      ),
+    );
+  }
+
+}

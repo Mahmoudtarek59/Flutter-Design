@@ -1,0 +1,26 @@
+new TextField(
+                decoration: new InputDecoration(
+                  labelText: "Hello",
+                  hintText: "Enter your name",
+                  icon: new Icon(Icons.people)
+                ),
+                autocorrect: true,
+                autofocus: true,
+                onChanged: _onChange,
+                onSubmitted: _onSubmit,
+              )
+
+
+
+
+
+-----------------------------------------------------------------------
+String _value = "";
+
+  void _onChange(String value){
+    setState(()=>_value="Change : ${value}");
+  }
+
+  void _onSubmit(String value){
+    setState(()=>_value="Submit : ${value}");
+  }
