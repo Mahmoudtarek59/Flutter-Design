@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:intl/intl.dart';
+
+class Clock extends StatefulWidget{
+
+  @override
+  _State createState()=> new _State();
+}
+
+class _State extends State<Clock>{
+
+  String _value = "Time here";
+  Timer _timer ;
+
+
+  @override
+  void initState() {
+    _timer =new Timer.periodic(new Duration(seconds: 1), _CallBack);
+  }
+
+  void _CallBack(Timer timer){
+    var now = new DateTime.now();
+    var formatter =new DateFormat('hh:mm:ss');
+    String fromatted =formatter.format(now);
+    setState(()=> _value = fromatted);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return  new Text(_value,style: new TextStyle(fontSize: 32.0),);
+  }
+}
