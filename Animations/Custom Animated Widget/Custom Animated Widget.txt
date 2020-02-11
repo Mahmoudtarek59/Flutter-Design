@@ -1,0 +1,76 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
+void main(){
+  runApp(new MaterialApp(
+    home: MyApp(),
+  ));
+}
+
+class MyApp extends StatefulWidget{
+  @override
+  _State createState()=> new _State();
+}
+
+class ButtonAnimation extends AnimatedWidget{
+
+  bool _clicked =false;
+  static final _size = new Tween(begin: 1.0,end: 2.0);
+
+  AnimationController controller;
+  ButtonAnimation({Key key,Animation animation,AnimationController controller}):super(key:key,listenable:animation)
+  {
+    this.controller=controller;
+  }
+  void _onPressed(){
+    if(_clicked) {
+      _clicked=false;
+      controller.reverse();
+    }else{
+      _clicked=true;
+      controller.forward();
+    }
+  }
+  Widget build(BuildContext context){
+    final Animation animation= listenable;
+
+    return new Transform.scale(
+      scale: _size.evaluate(animation),
+      child: new RaisedButton(onPressed: _onPressed,child: new Text("Click me"),),
+
+    );
+  }
+
+
+}
+class _State extends State<MyApp> with TickerProviderStateMixin{
+
+  Animation animation;
+  AnimationController controller;
+
+
+  @override
+  void initState() {
+    super.initState();
+    controller = new AnimationController(duration: const Duration(milliseconds: 1000),vsync: this);
+    animation= new CurvedAnimation(parent: controller, curve: Curves.easeIn);
+
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Name Here"),
+      ),
+      body: new Container(
+        padding: new EdgeInsets.all(30.0),
+        child:new Center(
+          child: new ButtonAnimation(animation: animation,controller: controller,),
+
+        ),
+      ),
+    );
+  }
+}
