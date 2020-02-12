@@ -1,3 +1,10 @@
 1- flutter map : Open Source (free);
 2- google map better than flutter map;
   
+
+
+*install flutter map package
+ -Use this package as a library
+  
+dependencies:
+    flutter_map: ^0.8.2 
