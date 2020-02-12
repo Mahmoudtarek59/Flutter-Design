@@ -1,0 +1,6 @@
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  map_launcher: ^0.4.2
