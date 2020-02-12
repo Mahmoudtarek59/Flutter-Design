@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
+
+void main() {
+  runApp(new MaterialApp(
+    home: MyApp(),
+  ));
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _State createState() => new _State();
+}
+
+class _State extends State<MyApp> {
+  MapController _mapController;
+  Map<String, LatLng> _places;
+  List<Marker> markers;
+
+  @override
+  void initState() {
+    
+    _mapController = new MapController();
+    _places = new Map<String, LatLng>();
+    _places.putIfAbsent("Stanley", () => new LatLng(31.238744, 29.947992));
+    _places.putIfAbsent("Qaitbay", () => new LatLng(31.217021, 29.885638));
+    _places.putIfAbsent("El Montaza", () => new LatLng(31.291516, 30.022234));
+
+    markers = new List<Marker>();
+    for (int i = 0; i < _places.length; i++) {
+      markers.add(new Marker(
+        width: 80,
+        height: 80,
+        builder: (ctx) => new Icon(Icons.pin_drop, color: Colors.red,),
+        point: _places.values.elementAt(i),
+      ));
+    }
+  }
+
+  List<Widget> CustomButtons (){
+    List<Widget> _buttons= new List<Widget>();
+    for(int i =0;i<_places.length;i++){
+      _buttons.add(new RaisedButton(child: new Text(_places.keys.elementAt(i)),onPressed: ()=> _showCoord(i)));
+    }
+    return _buttons;
+  }
+  void _showCoord(int index){
+    _mapController.move(_places.values.elementAt(index),15.0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Name Here"),
+      ),
+      body: new Container(
+          child: new Column(
+            children: <Widget>[
+              new Row(children: CustomButtons()),
+              new Flexible(
+                  child: new FlutterMap(
+                    mapController:_mapController,
+                    options: MapOptions(
+                      center: new LatLng(31.238744, 29.947992),
+                      zoom: 5.0,
+                    ),
+                    layers: [
+                      new TileLayerOptions(
+                          urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                          subdomains: ['a', 'b', 'c']),
+                      new MarkerLayerOptions(markers: markers),
+                    ],
+                  ))
+        ],
+      )),
+    );
+  }
+}
