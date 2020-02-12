@@ -27,12 +27,15 @@ class _State extends State<MyApp>{
 //      description: "Asia's tallest building",
 //    );
 
+
+
+
     if (await MapLauncher.isMapAvailable(MapType.google)) {
       await MapLauncher.launchMap(
         mapType: MapType.google,
-        coords: Coords(31.233568, 121.505504),
-        title: "Shanghai Tower",
-        description:  "Asia's tallest building",
+        coords: Coords(31.208990, 29.909223),
+        title: "Bibliotheca Alexandrina",
+        description:  "Al Azaritah WA Ash Shatebi, Qism Bab Sharqi, Alexandria Governorate",
       );
     }
 
