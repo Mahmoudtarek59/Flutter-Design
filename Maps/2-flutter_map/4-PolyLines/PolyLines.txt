@@ -1,0 +1,75 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
+void main(){
+  runApp(new MaterialApp(
+    home: MyApp(),
+  ));
+}
+
+class MyApp extends StatefulWidget{
+  @override
+  _State createState()=> new _State();
+}
+
+class _State extends State<MyApp>{
+
+  MapController _mapController;
+  List<Marker> _markers;
+  List<LatLng> _points;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _mapController= new MapController();
+    _points= new List<LatLng>();
+    _points.add(new LatLng(31.238744, 29.947992));
+    _points.add(new LatLng(31.217021, 29.885638));
+    _points.add(new LatLng(31.291516, 30.022234));
+    
+    _markers = new List<Marker>();
+    for(int i=0;i<_points.length;i++){
+      _markers.add(new Marker(
+        height: 80.0,
+        width: 80.0,
+        point: _points.elementAt(i),
+        builder: (ctx)=> new Icon(Icons.pin_drop,color: Colors.red,),
+      ));
+    }
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Name Here"),
+      ),
+      body: new FlutterMap(
+        mapController: _mapController,
+        options: new MapOptions(
+          center: new LatLng(31.235277, 29.948850),
+          zoom: 10.0,
+        ),
+        layers: [
+          new TileLayerOptions(
+            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            subdomains: ['a','b','c'],
+          ),
+          new MarkerLayerOptions(markers: _markers),
+          new PolylineLayerOptions(
+              polylines: [
+                new Polyline(
+                  color: Colors.yellow,
+                  points: _points,
+                  strokeWidth: 3.0,
+                )
+              ]
+          ),
+        ]
+      ),
+    );
+  }
+}
