@@ -1,0 +1,2 @@
+dependencies:
+  url_launcher: ^5.4.1

@@ -1,0 +1,58 @@
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:async';
+void main(){
+  runApp(new MaterialApp(
+    home: MyApp(),
+  ));
+}
+
+class MyApp extends StatefulWidget{
+  @override
+  _State createState()=> new _State();
+}
+
+class _State extends State<MyApp>{
+  final url='https://flutter.dev';
+  final createEmail='mailto:mahmoud9396@gmail.com?subject=Test&body=Hello World';
+  final phoneCall='tel:01287059341';
+  final sms='sms:01014077615';
+
+  void _urlLuncher(String MyUrl) async{
+    if(await canLaunch(MyUrl)) await launch(MyUrl);
+    else throw 'Could not launch $url';
+  }
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Name Here"),
+      ),
+      body: new Container(
+        padding: new EdgeInsets.all(30.0),
+        child: new Center(
+          child: new Column(
+            children: <Widget>[
+              new Container(
+                width: MediaQuery.of(context).size.width,
+                child: new RaisedButton(onPressed:()=>_urlLuncher(url),child: new Text("Open URL"),),
+              ),
+              new Container(
+                width: MediaQuery.of(context).size.width,
+                child: new RaisedButton(onPressed: ()=>_urlLuncher(createEmail),child: new Text("Create email"),),
+              ),
+              new Container(
+                width: MediaQuery.of(context).size.width,
+                child: new RaisedButton(onPressed: ()=>_urlLuncher(phoneCall),child: new Text("Make a phone call"),),
+              ),
+              new Container(
+                width: MediaQuery.of(context).size.width,
+                child: new RaisedButton(onPressed: ()=>_urlLuncher(sms),child: new Text("Send an SMS message"),),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
