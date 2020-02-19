@@ -1,0 +1,51 @@
+import 'package:flutter/material.dart';
+
+void main(){
+  runApp(new MaterialApp(
+    home: MyApp(),
+  ));
+}
+
+class MyApp extends StatefulWidget{
+  @override
+  _State createState()=> new _State();
+}
+
+class _State extends State<MyApp>{
+
+  List<DropdownMenuItem<String>> _item;
+  String _selectd;
+
+  @override
+  void initState() {
+    _item =new List<DropdownMenuItem<String>>();
+    for(int i=0;i<10;i++){
+      _item.add(new DropdownMenuItem(child: new Text("item ${i+1}"),value: "item ${i+1}",));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Name Here"),
+      ),
+      body: new Container(
+        padding: new EdgeInsets.all(30.0),
+        child: new Center(
+          child: new Column(
+            children: <Widget>[
+              new DropdownButton(
+                hint: new Text("Select Item"),
+                isExpanded: true,
+                items: _item,
+                onChanged:(val)=>setState(()=>_selectd=val),
+                value:_selectd,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
