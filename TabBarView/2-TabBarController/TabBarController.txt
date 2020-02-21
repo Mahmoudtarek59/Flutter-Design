@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+
+void main(){
+  runApp(new MaterialApp(
+    home: MyApp(),
+  ));
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _State createState()=> new _State();
+}
+
+class _State extends State<MyApp> with SingleTickerProviderStateMixin{
+
+  List<Tab> _tabs;
+  List<Widget> _frames;
+  Color _color;
+  TabController controller;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _color= Colors.green;
+    //tabs
+    _tabs= new List<Tab>();
+    _tabs.add(new Tab(icon:new Icon(Icons.store),));
+    _tabs.add(new Tab(icon: new Icon(Icons.account_balance),));
+    _tabs.add(new Tab( icon: new Icon(Icons.departure_board),));
+
+    //frames
+    _frames=new List<Widget>();
+    _frames.add(new Icon(Icons.store,size: 100,));
+    _frames.add(new Icon(Icons.account_balance,size:100));
+    _frames.add(new Icon(Icons.departure_board,size: 100,));
+
+    //controller
+    controller= new TabController(length: _tabs.length, vsync: this);
+  }
+
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Tab Controller"),
+        bottom: new TabBar(
+          tabs: _tabs,
+          controller: controller,
+        ),
+      ),
+      body: new TabBarView(
+        children: _frames,
+        controller: controller,
+      ),
+    );
+  }
+}
