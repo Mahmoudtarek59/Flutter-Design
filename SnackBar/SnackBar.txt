@@ -8,29 +8,32 @@ void main(){
 
 class MyApp extends StatefulWidget{
   @override
-  _State createState()=>new _State();
+  _State createState()=> new _State();
 }
 
 class _State extends State<MyApp>{
+  final GlobalKey<ScaffoldState> _globalKey=new GlobalKey<ScaffoldState>();
 
-  final GlobalKey<ScaffoldState> _ScaffoldState=new GlobalKey<ScaffoldState>();
 
-  void _showBar()=>_ScaffoldState.currentState.showSnackBar(new SnackBar(content: new Text("Hello World"),));
-
+  void _showSnackBar(){
+    setState(() {
+      _globalKey.currentState.showSnackBar(new SnackBar(content: new Text("Done ")));
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      key: _ScaffoldState,
+      key: _globalKey,
       appBar: new AppBar(
         title: new Text("Name Here"),
       ),
       body: new Container(
-        padding: new EdgeInsets.all(32.0),
+        padding: new EdgeInsets.all(30.0),
         child: new Center(
           child: new Column(
             children: <Widget>[
-              new Text("Add Widgets Here"),
-              new RaisedButton(onPressed: _showBar,child: new Text("SnackBar"),),
+              new Text("Hello World"),
+              new RaisedButton(onPressed: _showSnackBar,child: new Text("SnckBar"),),
             ],
           ),
         ),
