@@ -13,7 +13,6 @@ class _signState extends State<Signup> {
   String _username,_email,_password;
   final GlobalKey<FormState> _formState=new GlobalKey<FormState>();
 
-
   void _sign() async{
     final _formData=_formState.currentState;
     if(_formData.validate()){
@@ -22,14 +21,13 @@ class _signState extends State<Signup> {
         final FirebaseUser user= (await _auth.createUserWithEmailAndPassword(email: _email, password: _password)).user;
         assert(user != null);
         assert(await user.getIdToken()!=null);
+        user.sendEmailVerification();
         print(user.email);
-
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new Home(user:user),));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new MyApp(message: "check your email and Verify your account and login"),));
       }catch(e){
         print(e);
         //already have an account
-        //TODO add snack bar here to inform user
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new MyApp(),));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new MyApp(message: "already have an account Log in now",),));
       }
     }
   }

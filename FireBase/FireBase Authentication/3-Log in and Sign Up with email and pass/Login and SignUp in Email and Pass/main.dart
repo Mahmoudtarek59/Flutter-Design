@@ -11,36 +11,57 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
+  String message;
+  MyApp({Key key,this.message}):super(key:key);
   @override
-  _State createState() => new _State();
+  _State createState() => new _State(message: message);
 }
 
 class _State extends State<MyApp> {
+  String message;
+  _State({Key key,this.message});
+
   final GlobalKey<FormState> _globalKey = new GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _email;
   String _password;
+
+
+  @override
+  void initState() {
+    super.initState();
+    if(message!=null) {
+      print(message);
+      WidgetsBinding.instance.addPostFrameCallback((_) =>
+          _scaffoldKey.currentState.showSnackBar(
+            new SnackBar(content: new Text('$message')),
+          ));
+  }
+  }
 
   void _login() async {
     final formData = _globalKey.currentState;
     if (formData.validate()) {
       formData.save();
       try {
-        FirebaseUser user = (await _auth.signInWithEmailAndPassword(
-                email: _email, password: _password))
-            .user;
+        FirebaseUser user = (await _auth.signInWithEmailAndPassword(email: _email, password: _password)).user;
 
         assert(user != null);
 
         print(user.email);
         //navigator
+        if(user.isEmailVerified){
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => new Home(
                   user: user,
                 )));
+        }else{
+          _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text("Please check you email and verify your account !!")));
+        }
       } catch (e) {
         //Go to sign Up
-        //TODO add snack bar here to inform user
-        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>new Signup()));
+        _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text("Sign Up now ")));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>new Signup()));
         print(e);
       }
     }
@@ -49,6 +70,7 @@ class _State extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       body: new Container(
         padding: new EdgeInsets.all(30.0),
         child: new SingleChildScrollView(
