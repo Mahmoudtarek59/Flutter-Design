@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+
+void main(){
+  runApp(new MaterialApp(
+    home: MyApp(),
+  ));
+}
+
+class MyApp extends StatefulWidget{
+  @override
+  _State createState()=> new _State();
+}
+
+class _State extends State<MyApp>{
+
+  String _data=" ";
+  DatabaseReference ref;
+  @override
+  void initState() {
+
+    final FirebaseDatabase database= FirebaseDatabase.instance;
+    ref=database.reference().child("Item");
+  }
+
+  void _setData() async{
+    await ref.push().set("OK");//push new data in separate node
+    await ref.child("userID").set("1"); // set data once then update data every click
+    await ref.child("name").set("Mahmoud");
+  }
+
+  void _getData() async{
+    String userID;
+    String userName;
+    //DatabaseReference reference=FirebaseDatabase.instance.reference().child("Item");
+    Query query= ref;
+    await query.once().then((DataSnapshot snapshot){
+      userID=snapshot.value["userID"];
+      userName=snapshot.value["name"];
+    });
+    setState(() {
+      _data=userID + " " + userName;
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Name Here"),
+      ),
+      body: new Container(
+        padding: new EdgeInsets.all(30.0),
+        child: new Center(
+          child: new Column(
+            children: <Widget>[
+              new Text("$_data"),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: new RaisedButton(onPressed: _setData,child: new Text("Set Data To Firebase"),),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: new RaisedButton(onPressed: _getData,child: new Text("Get Data From Firebase"),),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
+}
