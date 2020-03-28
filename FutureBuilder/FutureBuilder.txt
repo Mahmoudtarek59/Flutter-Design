@@ -1,0 +1,79 @@
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+ main() => runApp(
+  MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: futureBuilder(),
+  ),
+);
+class futureBuilder extends StatefulWidget {
+  @override
+  _futureBuilderState createState() => _futureBuilderState();
+}
+
+class _futureBuilderState extends State<futureBuilder> {
+  Map _countries=new Map();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: futureWidget(),
+    );
+  }
+  Future<Map> _gitData() async{
+    var _url = 'http://country.io/names.json';
+    var response = await http.get(_url);
+    if(response.statusCode==200){
+      _countries=json.decode(response.body);
+    }else{
+      _countries ={"opps":"no data"};
+    }
+    return _countries;
+  }
+
+  Widget futureWidget(){
+    return FutureBuilder<Map>(
+        future: _gitData(),
+        builder: (BuildContext context, AsyncSnapshot<Map> snapshot){
+          print(snapshot);
+          if(snapshot.hasData){
+            return Container(
+              padding: new EdgeInsets.all(5.0),
+              child: new Center(
+                child: new Column(
+                  children: <Widget>[
+                    new Text("Countries",style: new TextStyle(fontWeight: FontWeight.bold),),
+                    new Expanded(child: new ListView.builder(
+                      itemCount: _countries.length,
+                      itemBuilder: (BuildContext context,int index){
+                        String key = _countries.keys.elementAt(index);
+                        return new Card(
+                          child: new Container(
+                            padding: new EdgeInsets.all(5.0),
+                            child: new Row(
+                              children: <Widget>[
+                                new Text('${key} : ',style: new TextStyle(color: Colors.red),),
+                                new Text(_countries[key]),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                    )
+                  ],
+                ),
+              ),
+            );
+          }else{
+            return Container(
+              child: Center(
+                child: Text("Wait"),
+              ),
+            );
+          }
+          },
+    );
+  }
+}
