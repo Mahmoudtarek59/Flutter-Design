@@ -1,0 +1,12 @@
+appBar: AppBar(
+        title: Text("MyShop"),
+        actions: [
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (_)=>[
+              PopupMenuItem(child: Text('only Favorites'),value: 0,),
+              PopupMenuItem(child: Text('Show All'),value: 1,),
+            ],
+          ),
+        ],
+      ),
