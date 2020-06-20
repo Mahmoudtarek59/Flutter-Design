@@ -1,0 +1,15 @@
+StreamBuilder(
+          stream: Firestore.instance
+              .collection('chats/pBO8Z28cYcPaAXS6rGf3/mesaages')
+              .snapshots(),
+          builder: (context, streamSnapshot) {
+            final documents = streamSnapshot.data.documents;
+             return streamSnapshot.connectionState==ConnectionState.waiting? Center(child: CircularProgressIndicator()):
+             ListView.builder(
+              itemCount: documents.length,
+              itemBuilder: (ctxt, index) => Container(
+                padding: EdgeInsets.all(8),
+                child: Text('${documents[index]['text']}'),
+              ),
+            );
+          }),
